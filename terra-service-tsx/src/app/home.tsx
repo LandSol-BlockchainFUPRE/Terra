@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import VideoBackground from '../../components/VideoBackground';
 import FeatureSection from '../../components/FeatureSection';
 import { Footer } from '../../components/Footer';
+import CTASection from '../../components/CATSection';
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,14 +76,77 @@ export default function Home() {
                 <FaFile size={18} color="white" />
                 <span>View Documents</span>
               </button>
+
+              {/* <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.7 }}
+              onClick={handleTransfer}
+              disabled={isLoading}
+              className="flex items-center justify-center w-full sm:w-auto px-4 sm:px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-opacity-90 transition-colors"
+            >
+              {isLoading ? (
+                <Loader2 size={18} className="mr-2 animate-spin" />
+              ) : (
+                <Send size={18} className="mr-2" />
+              )}
+              {isLoading ? "Processing..." : "Transfer Ownership"}
+            </motion.button> */}
+
+              {/* <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="flex items-center justify-center w-full sm:w-auto px-4 sm:px-6 py-3 bg-accent text-accent-foreground font-medium rounded-lg hover:bg-accent/80 transition-colors"
+          >
+            <FileText size={18} className="mr-2" />
+            <span className="editable-text">View Documents</span>
+          </motion.button> */}
             </div>
           </div>
-          {/* FAQ div */}
-          {/* <div className="w-[60%] mx-auto mt-4 pb-4">
-            <FAQ />
-          </div> */}
         </div>
       </section>
+
+      {/* feature section */}
+      <section className="relative z-10 bg-black/40 backdrop-blur-sm">
+        <div className="container mx-auto px-4 md:px-8 py-16">
+          <motion.h2
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="text-4xl font-bold text-white text-center mb-16"
+          >
+            <span className="editable-text">Why Choose Terra Registry</span>
+          </motion.h2>
+
+          <FeatureSection
+            title="Secure Document Verification"
+            description="Our blockchain-based verification system ensures that your property documents are tamper-proof and securely stored. Each document is cryptographically sealed and can be verified at any time."
+            icon={<FaShield className="h-6 w-6" color="white" />}
+            imageUrl="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073&q=80"
+          />
+
+          <FeatureSection
+            title="Instant Ownership Transfer"
+            description="Transfer property ownership in minutes, not months. Our smart contract system automates the verification process and creates an immutable record of ownership transfer on the blockchain."
+            icon={<FaWallet className="h-6 w-6" color="white" />}
+            imageUrl="https://images.unsplash.com/photo-1554469384-e58fac16e23a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"
+            reversed={true}
+            delay={0.2}
+          />
+
+          <FeatureSection
+            title="Comprehensive Document Management"
+            description="Store, organize, and access all your property documents in one secure location. Our platform supports multiple document formats and provides easy search and retrieval functionality."
+            icon={<FaFileCircleCheck className="h-6 w-6" color="white" />}
+            imageUrl="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+            delay={0.4}
+          />
+        </div>
+      </section>
+
+      {/* Call to action section */}
+      <CTASection />
 
       {/* footer */}
       <Footer />

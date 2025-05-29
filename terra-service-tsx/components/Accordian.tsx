@@ -24,11 +24,11 @@ const Accordion: React.FC<AccordionProps> = ({ items }) => {
             onClick={() => toggleIndex(index)}
             className="w-full text-left py-4 px-3 flex justify-between items-center focus:outline-none"
           >
-            <span className="font-medium text-gray-800">{item.question}</span>
-            <span className="text-xl">{activeIndex === index ? '-' : '+'}</span>
+            <span className="font-medium text-white">{item.question}</span>
+            <span className="text-xl text-white">{activeIndex === index ? '-' : '+'}</span>
           </button>
           {activeIndex === index && (
-            <div className="px-3 pb-4 text-gray-600 transition-all duration-300 ease-in-out">
+            <div className="px-3 pb-4 text-white transition-all duration-300 ease-in-out text-start">
                 {item.answer}
             </div>
             )}

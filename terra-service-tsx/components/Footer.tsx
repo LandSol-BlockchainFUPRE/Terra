@@ -17,7 +17,7 @@ export const Footer = () => {
                 </p>
             </div>
 
-            <div className="flex flex-col w-full sm:max-w-md bg-yellow-400 md:flex-row gap-8 md:gap-16">
+            <div className="flex flex-col w-full sm:max-w-md md:flex-row gap-8 md:gap-16">
                 <div>
                 <h4 className="text-white font-medium mb-4">
                     <span className="editable-text">Platform</span>
