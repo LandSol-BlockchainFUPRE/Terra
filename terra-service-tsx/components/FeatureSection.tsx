@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import { useEffect, useState, ReactNode } from 'react';
 import { useInView } from 'react-intersection-observer';

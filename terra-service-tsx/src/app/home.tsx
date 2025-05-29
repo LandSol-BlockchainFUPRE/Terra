@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import VideoBackground from '../../components/VideoBackground';
 import FeatureSection from '../../components/FeatureSection';
 import { Footer } from '../../components/Footer';
+import CTASection from '../../components/CATSection';
 
 export default function Home() {
 
@@ -143,6 +144,9 @@ export default function Home() {
         />
       </div>
     </section>
+
+    {/* Call to action section */}
+    <CTASection/>
 
     {/* footer */}
     <Footer/>

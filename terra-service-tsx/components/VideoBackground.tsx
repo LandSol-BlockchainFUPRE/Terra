@@ -1,7 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 
 export default function VideoBackground() {
   const [mounted, setMounted] = useState(false);

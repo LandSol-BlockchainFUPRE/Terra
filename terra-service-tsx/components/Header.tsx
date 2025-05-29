@@ -121,41 +121,6 @@ function Header() {
     {/* <MobileMenu onSignUpClick={() => {}} onConnectWalletClick={() => {}} /> */}
   </div>
 </header>
-
-
-    // <div className="w-[80%] mx-auto text-white flex justify-between items-center p-2">
-    //   <div className="flex gap-4">
-    //     <button className="py-2 px-8 bg-white text-black rounded-md">
-    //       Sign Up
-    //     </button>
-    //     <button
-    //       className="py-2 px-8 bg-blue-300 text-white rounded-md"
-    //       onClick={() => setShowWallets(!showWallets)}
-    //     >
-    //       {address ? shortenAddress(address) : 'Connect Wallet'}
-    //     </button>
-    //     {showWallets && (
-    //       <div className="relative bottom-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50">
-    //         {wallets.length === 0 ? (
-    //           <div className="p-2 text-sm text-black">No wallets found</div>
-    //         ) : (
-    //           wallets.map((wallet) => (
-    //             <button
-    //               key={wallet.name}
-    //               onClick={() => {
-    //                 connectWallet(wallet);
-    //                 setShowWallets(false);
-    //               }}
-    //               className="w-full px-4 py-2 text-left text-black text-sm hover:bg-gray-100"
-    //             >
-    //               {wallet.name}
-    //             </button>
-    //           ))
-    //         )}
-    //       </div>
-    //     )}
-    //   </div>
-    // </div>
   );
 }
 
