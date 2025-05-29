@@ -78,9 +78,9 @@ export default function Home() {
             </div>
           </div>
           {/* FAQ div */}
-          <div className="w-[60%] mx-auto mt-4 pb-4">
+          {/* <div className="w-[60%] mx-auto mt-4 pb-4">
             <FAQ />
-          </div>
+          </div> */}
         </div>
       </section>
 
