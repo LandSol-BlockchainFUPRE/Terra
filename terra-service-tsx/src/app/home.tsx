@@ -61,7 +61,7 @@ export default function Home() {
                 className="flex items-center justify-center w-full gap-3 sm:w-auto px-4 sm:px-6 py-3 bg-blue-500 text-white text-md font-medium rounded-lg hover:bg-blue-300 transition-colors"
               >
                 <FaUpload size={18} color="white" />
-                <span>Uplaod Documents</span>
+                <span>Upload Documents</span>
               </motion.button>
               <UploadModal
                 isOpen={isModalOpen}
