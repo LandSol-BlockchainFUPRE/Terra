@@ -58,7 +58,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center justify-center w-full gap-3 sm:w-auto px-4 sm:px-6 py-3 bg-blue-500 text-white text-md font-medium rounded-lg hover:bg-blue-300 transition-colors"
+              className="flex items-center justify-center w-full gap-3 sm:w-auto px-4 sm:px-6 py-3 bg-blue-500 text-white text-md font-medium rounded-lg hover:bg-blue-700 transition-colors"
             >
               <FaUpload size={18} color="white" />
               <span>Uplaod Documents</span>
@@ -69,7 +69,7 @@ export default function Home() {
               <FaCheckCircle size={18} color="black" />
               <span>Transfer Ownership</span>
             </button>
-            <button className="bg-blue-800 text-white flex justify-center items-center gap-4 px-10 py-2 rounded-md">
+            <button className="bg-blue-500 text-white flex justify-center items-center gap-4 px-10 py-2 rounded-md">
               <FaFile size={18} color="white" />
               <span>View Documents</span>
             </button>

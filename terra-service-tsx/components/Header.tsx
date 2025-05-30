@@ -75,8 +75,17 @@ function Header() {
       </motion.div>
     </div>
 
-    {/* Desktop Navigation */}
+    {/* Navigation */}
     <div className="hidden md:flex space-x-4">
+      <motion.button
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="px-4 py-2 rounded-lg bg-blue-500 text-white font-medium hover:bg-gray-100 transition-colors"
+      >
+        <span className="editable-text">Login</span>
+      </motion.button>
+
       <motion.button
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
