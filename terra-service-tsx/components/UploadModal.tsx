@@ -1,6 +1,14 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import React, { useState, useRef, ChangeEvent, DragEvent } from 'react';
+
+// interface UploadModalProps {
+//   isOpen: boolean;
+//   onClose: () => void;
+// }
+
+// import { useRef, useState, ChangeEvent, DragEvent } from 'react';
 
 interface UploadModalProps {
   isOpen: boolean;
@@ -11,6 +19,8 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [nin, setNin] = useState('');
+  const [landRegNumber, setLandRegNumber] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -20,14 +30,29 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
   };
 
   const handleUpload = async () => {
+    if (!nin || !landRegNumber) {
+      alert('Please enter both NIN and Land Registration Number.');
+      return;
+    }
+
     setIsUploading(true);
 
-    // Simulated upload
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    const formData = new FormData();
+    formData.append('nin', nin);
+    formData.append('landRegNumber', landRegNumber);
+    files.forEach((file, index) => {
+      formData.append(`document_${index + 1}`, file);
+    });
 
-    console.log('Uploaded:', files);
+    //upload
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    console.log('Uploaded:', { nin, landRegNumber, files });
+
+    // Reset state
     setIsUploading(false);
     setFiles([]);
+    setNin('');
+    setLandRegNumber('');
     onClose();
   };
 
@@ -53,7 +78,6 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
   const renderPreview = (file: File) => {
     if (file.type.startsWith('image/')) {
       return (
-        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={URL.createObjectURL(file)}
           alt={file.name}
@@ -62,17 +86,13 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
       );
     }
 
-    return (
-      <div className="text-gray-700 text-sm break-words">
-        📄 {file.name}
-      </div>
-    );
+    return <div className="text-gray-700 text-sm break-words">📄 {file.name}</div>;
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-opacity-50 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
       <div className="bg-white w-full max-w-2xl p-6 rounded-xl shadow-lg relative">
         <h2 className="text-xl font-semibold mb-4">Upload Documents</h2>
 
@@ -82,8 +102,9 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onClick={() => fileInputRef.current?.click()}
-          className={`border-2 border-dashed rounded-md p-6 cursor-pointer transition-all duration-300
-            ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'}`}
+          className={`border-2 border-dashed rounded-md p-6 cursor-pointer transition-all duration-300 ${
+            isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+          }`}
         >
           <p className="text-center text-gray-500">
             Drag and drop files here, or click to select
@@ -97,6 +118,37 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
           />
         </div>
 
+        {/* NIN & Land Reg Inputs */}
+        <form className="mt-4 space-y-4">
+          <div>
+            <label htmlFor="nin" className="block text-sm font-medium text-gray-700">
+              NIN
+            </label>
+            <input
+              id="nin"
+              type="text"
+              value={nin}
+              onChange={e => setNin(e.target.value)}
+              className="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-500"
+              placeholder="Enter NIN"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="landRegNumber" className="block text-sm font-medium text-gray-700">
+              Land Registration Number
+            </label>
+            <input
+              id="landRegNumber"
+              type="text"
+              value={landRegNumber}
+              onChange={e => setLandRegNumber(e.target.value)}
+              className="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-500"
+              placeholder="Enter Land Reg Number"
+            />
+          </div>
+        </form>
+
         {/* Previews */}
         {files.length > 0 && (
           <div className="mt-4 grid grid-cols-2 gap-3 max-h-40 overflow-y-auto">
@@ -106,7 +158,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
           </div>
         )}
 
-        {/* Action buttons */}
+        {/* Action Buttons */}
         <div className="mt-6 flex justify-end gap-3">
           <button
             onClick={onClose}
