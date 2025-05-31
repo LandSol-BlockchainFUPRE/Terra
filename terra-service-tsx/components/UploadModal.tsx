@@ -13,8 +13,11 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [nin, setNin] = useState('');
+  // const [nin, setNin] = useState('');
   const [landRegNumber, setLandRegNumber] = useState('');
+  const [location, setLocation] = useState('');
+  const [propertyType, setPropertyType] = useState('');
+  const [currentOwnerId, setCurrentOwnerId] = useState("5");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,30 +26,62 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-    const handleUpload = async () => {
-    if (!nin || !landRegNumber || !file) {
-      alert('Please enter NIN, Land Reg Number, and select a file.');
-      return;
+ const handleUpload = async () => {
+  if (!landRegNumber || !file) {
+    alert('Please enter NIN, Land Reg Number, and select a file.');
+    return;
+  }
+
+  setIsUploading(true);
+
+  const formData = new FormData();
+  // formData.append('nin', nin);
+  formData.append('unique_property_identifier', landRegNumber);
+  formData.append('proof_of_ownership_document', file);
+  formData.append('full_address', location)
+  formData.append('property_type', "land")
+  formData.append("current_owner", currentOwnerId)
+
+  try {
+    const res = await fetch('https://e1e0-102-90-100-9.ngrok-free.app/properties/', {
+      method: 'POST',
+      headers: {
+        // 'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': 'Basic bHVjaWZlcjpkZWF0aDIwMjU='
+      },
+      body: formData,
+    });
+
+    if (!res.ok) {
+      let errorMsg = `Upload failed with status ${res.status}`;
+      try {
+        const errorData = await res.json();
+        errorMsg = errorData.detail || JSON.stringify(errorData);
+      } catch {
+      }
+      throw new Error(errorMsg);
     }
 
-    setIsUploading(true);
-    const formData = new FormData();
-    formData.append('nin', nin);
-    formData.append('landRegNumber', landRegNumber);
-    formData.append('document', file);
+    const result = await res.json();
+    console.log('Uploaded successfully:', result);
 
-    // Simulate backend upload
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    console.log('Uploaded:', { nin, landRegNumber, file });
-
-    setIsUploading(false);
+    // Optionally show a success message or toast
+    alert('Upload successful!');
+    
+    // Reset form
     setFile(null);
-    setNin('');
     setLandRegNumber('');
+    setLocation('')
+    setPropertyType('')
     onClose();
-  };
 
+  } catch (err: any) {
+    console.error('Upload error:', err);
+    alert(err.message || 'An unexpected error occurred during upload.');
+  } finally {
+    setIsUploading(false);
+  }
+};
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -68,20 +103,6 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
   const handleDragLeave = () => {
     setIsDragging(false);
   };
-
-  // const renderPreview = (file: File) => {
-  //   if (file.type.startsWith('image/')) {
-  //     return (
-  //       <img
-  //         src={URL.createObjectURL(file)}
-  //         alt={file.name}
-  //         className="w-24 h-24 object-cover rounded shadow"
-  //       />
-  //     );
-  //   }
-
-  //   return <div className="text-gray-700 text-sm break-words">📄 {file.name}</div>;
-  // };
 
   if (!isOpen) return null;
 
@@ -113,17 +134,18 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
 
         {/* NIN & Land Reg Inputs */}
         <form className="mt-4 space-y-4">
+
           <div>
             <label htmlFor="nin" className="block text-sm font-medium text-gray-700">
-              NIN
+              Location Address
             </label>
             <input
-              id="nin"
+              id="loaction"
               type="text"
-              value={nin}
-              onChange={e => setNin(e.target.value)}
+              value={location}
+              onChange={e => setLocation(e.target.value)}
               className="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-500"
-              placeholder="Enter NIN"
+              placeholder="Enter location address"
             />
           </div>
 

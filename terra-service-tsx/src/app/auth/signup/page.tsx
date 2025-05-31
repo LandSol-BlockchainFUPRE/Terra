@@ -69,7 +69,7 @@ export default function SignupPage() {
       setMessage('Account created successfully!'); // Consider using a message from responseData if available
       console.log('Account creation successful:', responseData);
           //redirect to home page 
-    router.push('/home')
+        router.push('/login')
 
       // Reset form: ensure keys here match your state structure
       setFormData({
