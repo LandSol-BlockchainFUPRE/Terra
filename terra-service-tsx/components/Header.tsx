@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -8,6 +9,7 @@ import {
   WalletApi,
   Address,
 } from '@lucid-evolution/lucid';
+import { useRouter } from 'next/navigation';
 
 function Header() {
   type Wallet = {
@@ -59,6 +61,7 @@ function Header() {
   }
 
   const [address, setAddress] = useState<Address>('');
+  const router = useRouter();
 
   return (
     <header className="sticky top-0 z-50 w-full py-4 md:py-6 px-4 md:px-8 bg-black/30 backdrop-blur-sm">
@@ -77,23 +80,25 @@ function Header() {
 
     {/* Navigation */}
     <div className="hidden md:flex space-x-4">
-      <motion.button
+      {/* <motion.button
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
+        onClick={() => router.push('/auth/login/')}
         className="px-4 py-2 rounded-lg bg-blue-500 text-white font-medium hover:bg-gray-100 transition-colors"
       >
         <span className="editable-text">Login</span>
-      </motion.button>
+      </motion.button> */}
 
-      <motion.button
+      {/* <motion.button
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
+        onClick={() => router.push('/auth/signup/')}
         className="px-4 py-2 rounded-lg bg-white text-black font-medium hover:bg-gray-100 transition-colors"
       >
         <span className="editable-text">Sign Up</span>
-      </motion.button>
+      </motion.button> */}
 
       <motion.button
         initial={{ opacity: 0, y: -20 }}
@@ -104,7 +109,7 @@ function Header() {
       >
         <span className="editable-text">{address ? shortenAddress(address) : 'Connect Wallet'}</span>
       </motion.button>
-      {showWallets && (
+        {showWallets && (
           <div className="block bg-green-300">
             {wallets.length === 0 ? (
               <div className="p-2 text-sm text-black">No wallets found</div>
@@ -125,9 +130,6 @@ function Header() {
           </div>
         )}
     </div>
-
-    {/* Mobile Menu */}
-    {/* <MobileMenu onSignUpClick={() => {}} onConnectWalletClick={() => {}} /> */}
   </div>
 </header>
   );
