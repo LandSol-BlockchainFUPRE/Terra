@@ -1,14 +1,16 @@
+'use client';
+
 import { FaCheckCircle, FaFile, FaWallet } from 'react-icons/fa';
 import { FaFileCircleCheck, FaShield, FaUpload } from 'react-icons/fa6';
-import Header from '../../components/Header';
-import FAQ from '../../components/FAQ';
+import Header from '../../../components/Header';
+// import FAQ from '../../components/FAQ';
 import { useState } from 'react';
-import UploadModal from '../../components/UploadModal';
+import UploadModal from '../../../components/UploadModal';
 import { motion } from 'framer-motion';
-import VideoBackground from '../../components/VideoBackground';
-import FeatureSection from '../../components/FeatureSection';
-import { Footer } from '../../components/Footer';
-import CTASection from '../../components/CATSection';
+import VideoBackground from '../../../components/VideoBackground';
+import FeatureSection from '../../../components/FeatureSection';
+import { Footer } from '../../../components/Footer';
+import CTASection from '../../../components/CATSection';
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);

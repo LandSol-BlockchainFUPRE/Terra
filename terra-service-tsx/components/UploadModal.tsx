@@ -3,20 +3,14 @@
 
 import React, { useState, useRef, ChangeEvent, DragEvent } from 'react';
 
-// interface UploadModalProps {
-//   isOpen: boolean;
-//   onClose: () => void;
-// }
-
-// import { useRef, useState, ChangeEvent, DragEvent } from 'react';
-
 interface UploadModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
 const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
-  const [files, setFiles] = useState<File[]>([]);
+  // const [files, setFiles] = useState<File[]>([]);
+  const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [nin, setNin] = useState('');
@@ -24,45 +18,45 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFiles(Array.from(e.target.files));
+    if (e.target.files && e.target.files.length > 0) {
+      setFile(e.target.files[0]);
     }
   };
 
-  const handleUpload = async () => {
-    if (!nin || !landRegNumber) {
-      alert('Please enter both NIN and Land Registration Number.');
+    const handleUpload = async () => {
+    if (!nin || !landRegNumber || !file) {
+      alert('Please enter NIN, Land Reg Number, and select a file.');
       return;
     }
 
     setIsUploading(true);
-
     const formData = new FormData();
     formData.append('nin', nin);
     formData.append('landRegNumber', landRegNumber);
-    files.forEach((file, index) => {
-      formData.append(`document_${index + 1}`, file);
-    });
+    formData.append('document', file);
 
-    //upload
+    // Simulate backend upload
     await new Promise(resolve => setTimeout(resolve, 2000));
-    console.log('Uploaded:', { nin, landRegNumber, files });
 
-    // Reset state
+    console.log('Uploaded:', { nin, landRegNumber, file });
+
     setIsUploading(false);
-    setFiles([]);
+    setFile(null);
     setNin('');
     setLandRegNumber('');
     onClose();
   };
+
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
 
-    const droppedFiles = Array.from(e.dataTransfer.files);
-    setFiles(droppedFiles);
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) {
+      setFile(droppedFile);
+    }
   };
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
@@ -75,19 +69,19 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
     setIsDragging(false);
   };
 
-  const renderPreview = (file: File) => {
-    if (file.type.startsWith('image/')) {
-      return (
-        <img
-          src={URL.createObjectURL(file)}
-          alt={file.name}
-          className="w-24 h-24 object-cover rounded shadow"
-        />
-      );
-    }
+  // const renderPreview = (file: File) => {
+  //   if (file.type.startsWith('image/')) {
+  //     return (
+  //       <img
+  //         src={URL.createObjectURL(file)}
+  //         alt={file.name}
+  //         className="w-24 h-24 object-cover rounded shadow"
+  //       />
+  //     );
+  //   }
 
-    return <div className="text-gray-700 text-sm break-words">📄 {file.name}</div>;
-  };
+  //   return <div className="text-gray-700 text-sm break-words">📄 {file.name}</div>;
+  // };
 
   if (!isOpen) return null;
 
@@ -111,7 +105,6 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
           </p>
           <input
             type="file"
-            multiple
             onChange={handleFileChange}
             ref={fileInputRef}
             className="hidden"
@@ -150,13 +143,21 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
         </form>
 
         {/* Previews */}
-        {files.length > 0 && (
-          <div className="mt-4 grid grid-cols-2 gap-3 max-h-40 overflow-y-auto">
-            {files.map((file, idx) => (
-              <div key={idx}>{renderPreview(file)}</div>
-            ))}
-          </div>
-        )}
+        {file && (
+        <div className="mt-4 max-h-40 overflow-y-auto">
+          {file.type.startsWith('image/') ? (
+            <img
+              src={URL.createObjectURL(file)}
+              alt={file.name}
+              className="w-24 h-24 object-cover rounded shadow"
+            />
+          ) : (
+            <div className="text-gray-700 text-sm break-words">
+              📄 {file.name}
+            </div>
+          )}
+        </div>
+      )}
 
         {/* Action Buttons */}
         <div className="mt-6 flex justify-end gap-3">
@@ -169,7 +170,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
           </button>
           <button
             onClick={handleUpload}
-            disabled={isUploading || files.length === 0}
+            disabled={isUploading || file == null}
             className="py-2 px-4 rounded bg-blue-500 text-white hover:bg-blue-600 flex items-center"
           >
             {isUploading ? (

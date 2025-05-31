@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -16,6 +17,7 @@ import {
   fromText,
   toUnit,
 } from '@lucid-evolution/lucid';
+import { useRouter } from 'next/navigation';
 
 const script = applyDoubleCborEncoding(
   '590190010100229800aba2aba1aba0aab9faab9eaab9dab9a488888896600264653001300800198041804800cdc3a400130080024888966002600460106ea800e266446644b300130060018acc004c034dd5004400a2c80722b300130030018acc004c034dd5004400a2c80722c805900b0992cc004c014c02cdd5003c4c9660020050018acc004c04400a2b30013003375a601a60200051323300100137586022601c6ea8018896600200314a115980099baf3012300f3754602400202b14a3133002002301300140348082294100b400500e201c14a11598009808000c4cdc39bad300c300f001480062c806900a192cc004c008c02cdd5000c52f5bded8c113756601e60186ea800500a19198008009bab300f3010301030103010300c375400844b30010018a6103d87a8000899192cc004cdc8803000c56600266e3c018006266e95200033011300f0024bd7045300103d87a80004035133004004301300340346eb8c034004c04000500e18051baa006375c601860126ea800cdc3a400516401c300800130033754011149a26cac8009',
@@ -57,7 +59,7 @@ function Header() {
 
   const wallets = getWallets();
 
-  async function connectAndSignWithWallet(wallet: Wallet) {
+  async function connectWallet(wallet: Wallet) {
     if (!lucid) throw 'Uninitialized Lucid';
 
     const api = await wallet.enable();
@@ -81,6 +83,7 @@ function Header() {
   }
 
   const [address, setAddress] = useState<Address>('');
+  const router = useRouter();
 
   async function mint() {
     if (!lucid) throw 'Uninitialized Lucid';
@@ -191,14 +194,15 @@ function Header() {
 
         {/* Navigation */}
         <div className="hidden md:flex space-x-4">
-          <motion.button
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="px-4 py-2 rounded-lg bg-blue-500 text-white font-medium hover:bg-gray-100 transition-colors"
-          >
-            <span className="editable-text">Login</span>
-          </motion.button>
+          {/* <motion.button
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        onClick={() => router.push('/auth/login/')}
+        className="px-4 py-2 rounded-lg bg-blue-500 text-white font-medium hover:bg-gray-100 transition-colors"
+      >
+        <span className="editable-text">Login</span>
+      </motion.button> */}
 
           <motion.button
             initial={{ opacity: 0, y: -20 }}
@@ -208,6 +212,15 @@ function Header() {
           >
             <span className="editable-text">Sign Up</span>
           </motion.button>
+          {/* <motion.button
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        onClick={() => router.push('/auth/signup/')}
+        className="px-4 py-2 rounded-lg bg-white text-black font-medium hover:bg-gray-100 transition-colors"
+      >
+        <span className="editable-text">Sign Up</span>
+      </motion.button> */}
 
           <motion.button
             initial={{ opacity: 0, y: -20 }}
@@ -229,7 +242,7 @@ function Header() {
                   <button
                     key={wallet.name}
                     onClick={() => {
-                      connectAndSignWithWallet(wallet);
+                      connectWallet(wallet);
                       setShowWallets(false);
                     }}
                     className="w-full px-4 py-2 text-left text-black text-sm hover:bg-gray-100"
@@ -241,9 +254,6 @@ function Header() {
             </div>
           )}
         </div>
-
-        {/* Mobile Menu */}
-        {/* <MobileMenu onSignUpClick={() => {}} onConnectWalletClick={() => {}} /> */}
       </div>
     </header>
   );
