@@ -23,7 +23,8 @@ const script = applyDoubleCborEncoding(
   '590190010100229800aba2aba1aba0aab9faab9eaab9dab9a488888896600264653001300800198041804800cdc3a400130080024888966002600460106ea800e266446644b300130060018acc004c034dd5004400a2c80722b300130030018acc004c034dd5004400a2c80722c805900b0992cc004c014c02cdd5003c4c9660020050018acc004c04400a2b30013003375a601a60200051323300100137586022601c6ea8018896600200314a115980099baf3012300f3754602400202b14a3133002002301300140348082294100b400500e201c14a11598009808000c4cdc39bad300c300f001480062c806900a192cc004c008c02cdd5000c52f5bded8c113756601e60186ea800500a19198008009bab300f3010301030103010300c375400844b30010018a6103d87a8000899192cc004cdc8803000c56600266e3c018006266e95200033011300f0024bd7045300103d87a80004035133004004301300340346eb8c034004c04000500e18051baa006375c601860126ea800cdc3a400516401c300800130033754011149a26cac8009',
 );
 
-const docDataUrl = '';
+const docDataUrl =
+  'https://e1e0-102-90-100-9.ngrok-free.app/properties/Qmb7w2BMTx8LMRwE7U9npyRewPtLYYoz7RbPbMCVeK4dxW/';
 
 function Header() {
   type Wallet = {
@@ -117,7 +118,12 @@ function Header() {
     let apiMetadata;
     try {
       console.log(`Fetching metadata from: ${docDataUrl}`);
-      const response = await fetch(docDataUrl);
+      const response = await fetch(docDataUrl, {
+        headers: {
+          Authorization: 'Basic bHVjaWZlcjpkZWFOaDlwMjU=',
+          'Content-Type': 'application/json',
+        },
+      });
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(
@@ -176,6 +182,8 @@ function Header() {
     //   setIsMinting(false);
     // }
   }
+
+  mint();
 
   return (
     <header className="sticky top-0 z-50 w-full py-4 md:py-6 px-4 md:px-8 bg-black/30 backdrop-blur-sm">
