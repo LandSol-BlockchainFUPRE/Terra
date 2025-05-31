@@ -12,18 +12,59 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+  e.preventDefault();
+  setIsLoading(true)
 
-    // Simulated login process
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log('Logging in with:', { username, password });
-
-    setIsLoading(false);
-
-    //redirect to home page 
-    router.push('/home')
+  const payload = {
+    username: username,
+    password: password,
   };
+
+  try {
+    const res = await fetch('https://e1e0-102-90-100-9.ngrok-free.app/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': 'Basic bHVjaWZlcjpkZWF0aDIwMjU=' // Use your backend's Basic Auth for app-level security
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      let errorDetail = `Login failed (Status: ${res.status})`;
+      try {
+        const errorData = await res.json();
+        errorDetail = errorData.detail || JSON.stringify(errorData) || `Server error: ${res.statusText}`;
+      } catch (jsonError) {
+        errorDetail = `Server error: ${res.statusText} (Response not JSON)`;
+      }
+      throw new Error(errorDetail);
+    }
+
+    const data = await res.json();
+    console.log("Login successful:", data);
+    alert("Login successful");
+    router.push('/home');
+
+  } catch (error: any) {
+    console.error("Login error details:", error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+// const handleLogin = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     setIsLoading(true);
+
+//     // Simulated login process
+//     await new Promise((resolve) => setTimeout(resolve, 1500));
+//     console.log('Logging in with:', { username, password });
+
+//     setIsLoading(false);
+
+//     //redirect to home page 
+//     router.push('/home')
+//   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black px-4">

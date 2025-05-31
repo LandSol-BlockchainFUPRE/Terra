@@ -2,20 +2,22 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
     fullname: '',
-    dob: '',
-    address: '',
-    nin: '',
-    username: '',
+    date_of_birth: '',
+    residential_address: '',
+    id_number: '',
+    // username: '',
     password: '',
-    confirmPassword: ''
+    // confirmPassword: ''
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState('');
+    const router = useRouter();
 
     // const username: string = 'lucifer';
     // const passwordAuth: string = 'death2025'; 
@@ -29,43 +31,63 @@ export default function SignupPage() {
     setIsSubmitting(true);
     setMessage('');
 
-    //  try {
-    //   const res = await fetch('https://e1e0-102-90-100-9.ngrok-free.app/user-profiles/', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Authorization': 'Basic ' + btoa(`${username}:${passwordAuth}`),
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(formData),
-    //   });
+    // Construct the payload with the exact field names from your working curl command
+    const payload = {
+      fullname: formData.fullname,
+      date_of_birth: formData.date_of_birth,         // Matches curl and updated state
+      residential_address: formData.residential_address, // Matches curl and updated state
+      id_number: formData.id_number,                 // Matches curl and updated state
+      password: formData.password,                   // This is the new user's password
+    };
 
-    //   if (!res.ok) {
-    //     const errorData = await res.json();
-    //     throw new Error(errorData.detail || 'Failed to create account');
-    //   }
+    try {
+      const res = await fetch('https://e1e0-102-90-100-9.ngrok-free.app/user-profiles/', {
+        method: 'POST',
+        headers: {
+            // Use the Content-Type from curl, including charset for completeness
+            'Content-Type': 'application/json; charset=utf-8',
+            // IMPORTANT: Use the Authorization token that worked in your curl command
+            'Authorization': "Basic bHVjaWZlcjpkZWF0aDIwMjU=" // Corrected Token from your curl
+        },
+        body: JSON.stringify(payload), // Send the correctly structured payload
+      });
 
-    //   setMessage('Account created successfully!');
-    //   setFormData({
-    //     fullname: '',
-    //     dob: '',
-    //     address: '',
-    //     nin: '',
-    //     username: '',
-    //     password: '',
-    //   });
-    // } catch (error: any) {
-    //   setMessage(error.message);
-    // } finally {
-    //   setIsSubmitting(false);
-    // }
+      if (!res.ok) {
+        let errorDetail = `Failed to create account (Status: ${res.status})`;
+        try {
+          const errorData = await res.json();
+          // Use errorData.detail, or stringify the whole errorData, or fallback to statusText
+          errorDetail = errorData.detail || JSON.stringify(errorData) || `Server error: ${res.statusText}`;
+        } catch (jsonError) {
+          // If the error response wasn't JSON
+          errorDetail = `Server error: ${res.statusText} (Response not JSON)`;
+        }
+        throw new Error(errorDetail);
+      }
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+      const responseData = await res.json(); // Assuming successful response also sends JSON
+      setMessage('Account created successfully!'); // Consider using a message from responseData if available
+      console.log('Account creation successful:', responseData);
+          //redirect to home page 
+    router.push('/home')
 
-    console.log('Submitted:', formData);
-    setIsSubmitting(false);
-    // Redirect or show success here
-  };
+      // Reset form: ensure keys here match your state structure
+      setFormData({
+        fullname: '',
+        date_of_birth: '',
+        residential_address: '',
+        id_number: '',
+        password: '',
+        // username: '', // if you had it in state
+      });
+
+    } catch (error: any) {
+      setMessage(error.message || 'An unexpected error occurred.');
+      console.error("Signup error details:", error); // Log the error object for more details
+    } finally {
+      setIsSubmitting(false);
+    }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black px-4">
@@ -96,8 +118,8 @@ export default function SignupPage() {
             <label className="block text-white/80 text-sm mb-1">Date of Birth</label>
             <input
               type="date"
-              name="dob"
-              value={formData.dob}
+              name="date_of_birth"
+              value={formData.date_of_birth}
               onChange={handleChange}
               required
               className="w-full px-4 py-2 bg-black/30 text-white border border-white/20 rounded-lg focus:outline-none focus:ring focus:border-primary"
@@ -107,8 +129,8 @@ export default function SignupPage() {
           <div>
             <label className="block text-white/80 text-sm mb-1">Address</label>
             <textarea
-              name="address"
-              value={formData.address}
+              name="residential_address"
+              value={formData.residential_address}
               onChange={handleChange}
               rows={2}
               required
@@ -120,15 +142,15 @@ export default function SignupPage() {
             <label className="block text-white/80 text-sm mb-1">NIN Number</label>
             <input
               type="text"
-              name="nin"
-              value={formData.nin}
+              name="id_number"
+              value={formData.id_number}
               onChange={handleChange}
               required
               className="w-full px-4 py-2 bg-black/30 text-white border border-white/20 rounded-lg focus:outline-none focus:ring focus:border-primary"
             />
           </div>
 
-          <div>
+          {/* <div>
             <label className="block text-white/80 text-sm mb-1">Username</label>
             <input
               type="text"
@@ -138,7 +160,7 @@ export default function SignupPage() {
               required
               className="w-full px-4 py-2 bg-black/30 text-white border border-white/20 rounded-lg focus:outline-none focus:ring focus:border-primary"
             />
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -152,7 +174,7 @@ export default function SignupPage() {
                 className="w-full px-4 py-2 bg-black/30 text-white border border-white/20 rounded-lg focus:outline-none focus:ring focus:border-primary"
               />
             </div>
-            <div>
+            {/* <div>
               <label className="block text-white/80 text-sm mb-1">Confirm Password</label>
               <input
                 type="password"
@@ -162,7 +184,7 @@ export default function SignupPage() {
                 required
                 className="w-full px-4 py-2 bg-black/30 text-white border border-white/20 rounded-lg focus:outline-none focus:ring focus:border-primary"
               />
-            </div>
+            </div> */}
           </div>
 
           <button
