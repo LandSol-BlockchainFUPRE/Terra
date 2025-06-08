@@ -9,7 +9,7 @@ import {
   WalletApi,
   Address,
 } from '@lucid-evolution/lucid';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 
 function Header() {
   type Wallet = {
@@ -61,7 +61,7 @@ function Header() {
   }
 
   const [address, setAddress] = useState<Address>('');
-  const router = useRouter();
+  // const router = useRouter();
 
   return (
     <header className="sticky top-0 z-50 w-full py-4 md:py-6 px-4 md:px-8 bg-black/30 backdrop-blur-sm">

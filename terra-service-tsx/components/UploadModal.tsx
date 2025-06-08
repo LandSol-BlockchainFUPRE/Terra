@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
@@ -65,7 +67,6 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
     const result = await res.json();
     console.log('Uploaded successfully:', result);
 
-    // Optionally show a success message or toast
     alert('Upload successful!');
     
     // Reset form
