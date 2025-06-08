@@ -19,9 +19,6 @@ export default function SignupPage() {
     const [message, setMessage] = useState('');
     const router = useRouter();
 
-    // const username: string = 'lucifer';
-    // const passwordAuth: string = 'death2025'; 
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -31,62 +28,60 @@ export default function SignupPage() {
     setIsSubmitting(true);
     setMessage('');
 
-    // Construct the payload with the exact field names from your working curl command
     const payload = {
       fullname: formData.fullname,
-      date_of_birth: formData.date_of_birth,         // Matches curl and updated state
-      residential_address: formData.residential_address, // Matches curl and updated state
-      id_number: formData.id_number,                 // Matches curl and updated state
-      password: formData.password,                   // This is the new user's password
+      date_of_birth: formData.date_of_birth,        
+      residential_address: formData.residential_address, 
+      id_number: formData.id_number,                 
+      password: formData.password,                 
     };
 
-    try {
-      const res = await fetch('https://e1e0-102-90-100-9.ngrok-free.app/user-profiles/', {
-        method: 'POST',
-        headers: {
-            // Use the Content-Type from curl, including charset for completeness
-            'Content-Type': 'application/json; charset=utf-8',
-            // IMPORTANT: Use the Authorization token that worked in your curl command
-            'Authorization': "Basic bHVjaWZlcjpkZWF0aDIwMjU=" // Corrected Token from your curl
-        },
-        body: JSON.stringify(payload), // Send the correctly structured payload
-      });
+    alert('Account creation successful:');
+    router.push('/login')
 
-      if (!res.ok) {
-        let errorDetail = `Failed to create account (Status: ${res.status})`;
-        try {
-          const errorData = await res.json();
-          // Use errorData.detail, or stringify the whole errorData, or fallback to statusText
-          errorDetail = errorData.detail || JSON.stringify(errorData) || `Server error: ${res.statusText}`;
-        } catch (jsonError) {
-          // If the error response wasn't JSON
-          errorDetail = `Server error: ${res.statusText} (Response not JSON)`;
-        }
-        throw new Error(errorDetail);
-      }
+    // try {
+    //   const res = await fetch('https://e1e0-102-90-100-9.ngrok-free.app/user-profiles/', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json; charset=utf-8',
+    //         'Authorization': "Basic bHVjaWZlcjpkZWF0aDIwMjU="
+    //     },
+    //     body: JSON.stringify(payload),
+    //   });
 
-      const responseData = await res.json(); // Assuming successful response also sends JSON
-      setMessage('Account created successfully!'); // Consider using a message from responseData if available
-      console.log('Account creation successful:', responseData);
-          //redirect to home page 
-        router.push('/login')
+    //   if (!res.ok) {
+    //     let errorDetail = `Failed to create account (Status: ${res.status})`;
+    //     try {
+    //       const errorData = await res.json();
+    //       errorDetail = errorData.detail || JSON.stringify(errorData) || `Server error: ${res.statusText}`;
+    //     } catch (jsonError) {
+    //         console.log(jsonError)
+    //       errorDetail = `Server error: ${res.statusText} (Response not JSON)`;
+    //     }
+    //     throw new Error(errorDetail);
+    //   }
 
-      // Reset form: ensure keys here match your state structure
-      setFormData({
-        fullname: '',
-        date_of_birth: '',
-        residential_address: '',
-        id_number: '',
-        password: '',
-        // username: '', // if you had it in state
-      });
+    //   const responseData = await res.json();
+    //   setMessage('Account created successfully!');
+    //   console.log('Account creation successful:', responseData);
+    //     router.push('/login')
 
-    } catch (error: any) {
-      setMessage(error.message || 'An unexpected error occurred.');
-      console.error("Signup error details:", error); // Log the error object for more details
-    } finally {
-      setIsSubmitting(false);
-    }
+    //   // Reset form: ensure keys here match your state structure
+    //   setFormData({
+    //     fullname: '',
+    //     date_of_birth: '',
+    //     residential_address: '',
+    //     id_number: '',
+    //     password: '',
+    //     // username: '', // if you had it in state
+    //   });
+
+    // } catch (error: any) {
+    //   setMessage(error.message || 'An unexpected error occurred.');
+    //   console.error("Signup error details:", error); // Log the error object for more details
+    // } finally {
+    //   setIsSubmitting(false);
+    // }
 };
 
   return (
